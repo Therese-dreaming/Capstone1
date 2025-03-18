@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    height: 50px;
+    background-color: #0d5c2f;
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.signup-form {
+    flex: 1;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.signup-form h1 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.signup-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #0d5c2f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.divider {
+    height: 1px;
+    background-color: #ddd;
+    margin: 25px 0;
+}
+
+.login-link {
+    text-align: center;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #0d5c2f;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.church-logo {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.church-circle {
+    width: 300px;
+    height: 300px;
+    background-color: #a98a2a;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.church-illustration {
+    width: 250px;
+    height: 250px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><path d="M150 30 L150 60 M130 60 L170 60 L170 90 L150 70 L130 90 L130 60 M115 90 L185 90 L185 120 L115 120 L115 90 M130 120 L130 150 L170 150 L170 120 M145 150 L145 170 L155 170 L155 150 M120 170 L180 170 L190 270 L110 270 L120 170 M110 150 L110 270 M190 150 L190 270 M140 130 L140 140 L150 140 L150 130 L140 130 M160 130 L160 140 L170 140 L170 130 L160 130" fill="none" stroke="white" stroke-width="2"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column-reverse;
+    }
+    
+    .signup-form {
+        max-width: 100%;
+        margin-top: 30px;
+    }
+    
+    .church-circle {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .church-illustration {
+        width: 170px;
+        height: 170px;
+    }
+}
