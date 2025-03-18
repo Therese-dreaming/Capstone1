@@ -1,17 +1,6 @@
 {
     "version": 2,
     "framework": "laravel",
-    "functions": {
-        "api/*.php": {
-            "runtime": "vercel-php@0.6.0"
-        }
-    },
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "/api/index.php"
-        }
-    ],
     "builds": [
         {
             "src": "public/**",
@@ -20,6 +9,12 @@
         {
             "src": "api/index.php",
             "use": "@vercel/php"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/api/index.php"
         }
     ],
     "outputDirectory": "public",
