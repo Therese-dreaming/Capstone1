@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
 <body class="bg-black m-0 p-0">
@@ -21,13 +22,29 @@
                     <img src="{{ asset('images/church-logo.png') }}" alt="Logo" class="h-12 w-12" />
                     <span class="text-white ml-3 text-xl">SANTA MARTA | SAN ROQUE</span>
                 </a>
-                <div class="ml-auto">
-                    <button class="text-white">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
+                <div class="ml-auto flex items-center gap-4">
+                    @auth
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="text-white flex items-center gap-2">
+                                <span>{{ Auth::user()->name }}</span>
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            </button>
+                            <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        Logout
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @else
+                        <a href="{{ route('login') }}" class="text-white hover:text-gray-200 px-4 py-2 border border-white rounded-lg transition-colors">Login</a>
+                        <a href="{{ route('signup') }}" class="bg-white text-[#0d5c2f] hover:bg-gray-100 px-4 py-2 rounded-lg transition-colors">Register</a>
+                    @endauth
                 </div>
             </div>
         </nav>
@@ -36,8 +53,7 @@
         <main class="flex-grow">
             <!-- Hero Section -->
             <div class="relative min-h-screen">
-                <img src="{{ asset('images/church-bg.jpg') }}" alt="Church Background"
-                    class="absolute inset-0 w-full h-full object-cover brightness-50" />
+                <img src="{{ asset('images/church-bg.jpg') }}" alt="Church Background" class="absolute inset-0 w-full h-full object-cover brightness-50" />
                 <div class="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
                     <h1 class="text-6xl md:text-7xl font-bold mb-4 tracking-wider">
                         DAMBANANG PANGDIYOSESIS<br />NI STA. MARTA
@@ -114,91 +130,79 @@
                             <p>3:00 PM - 5:00 PM</p>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Ministry Cards Section (Now full-width and moved outside container) -->
-                    <div class="w-full bg-white py-20">
-                        <div class="flex flex-col md:flex-row w-full h-[80vh]">
-                            <!-- Sacraments Card -->
-                            <div class="relative w-full md:w-1/3 h-full">
-                                <img src="{{ asset('images/sacraments.jpg') }}" alt="Sacraments"
-                                    class="w-full h-full object-cover grayscale">
-                                <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center">
-                                    <h3 class="text-white text-5xl font-bold mb-4 font-['Rowdies']">SACRAMENTS</h3>
-                                    <a href="#"
-                                        class="text-[#0d5c2f] font-bold bg-white px-6 py-1.5 text-sm rounded-xl">LEARN
-                                        MORE</a>
-                                </div>
+                <!-- Ministry Cards Section (Now full-width and moved outside container) -->
+                <div class="w-full bg-white py-20">
+                    <div class="flex flex-col md:flex-row w-full h-[80vh]">
+                        <!-- Sacraments Card -->
+                        <div class="relative w-full md:w-1/3 h-full">
+                            <img src="{{ asset('images/sacraments.jpg') }}" alt="Sacraments" class="w-full h-full object-cover grayscale">
+                            <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center">
+                                <h3 class="text-white text-5xl font-bold mb-4 font-['Rowdies']">SACRAMENTS</h3>
+                                <a href="#" class="text-[#0d5c2f] font-bold bg-white px-6 py-1.5 text-sm rounded-xl">LEARN
+                                    MORE</a>
                             </div>
+                        </div>
 
-                            <!-- Devotion Card -->
-                            <div class="relative w-full md:w-1/3 h-full">
-                                <img src="{{ asset('images/devotion.jpg') }}" alt="Devotion"
-                                    class="w-full h-full object-cover grayscale">
-                                <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center">
-                                    <h3 class="text-white text-5xl font-bold mb-4 font-['Rowdies']">DEVOTION</h3>
-                                    <a href="#"
-                                        class="text-[#0d5c2f] font-bold bg-white px-6 py-1.5 text-sm rounded-xl">LEARN
-                                        MORE</a>
-                                </div>
+                        <!-- Devotion Card -->
+                        <div class="relative w-full md:w-1/3 h-full">
+                            <img src="{{ asset('images/devotion.jpg') }}" alt="Devotion" class="w-full h-full object-cover grayscale">
+                            <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center">
+                                <h3 class="text-white text-5xl font-bold mb-4 font-['Rowdies']">DEVOTION</h3>
+                                <a href="#" class="text-[#0d5c2f] font-bold bg-white px-6 py-1.5 text-sm rounded-xl">LEARN
+                                    MORE</a>
                             </div>
+                        </div>
 
-                            <!-- Ministries Card -->
-                            <div class="relative w-full md:w-1/3 h-full">
-                                <img src="{{ asset('images/ministries.jpg') }}" alt="Ministries"
-                                    class="w-full h-full object-cover grayscale">
-                                <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center">
-                                    <h3 class="text-white text-5xl font-bold mb-4 font-['Rowdies']">MINISTRIES</h3>
-                                    <a href="#"
-                                        class="text-[#0d5c2f] font-bold bg-white px-6 py-1.5 text-sm rounded-xl">LEARN
-                                        MORE</a>
-                                </div>
+                        <!-- Ministries Card -->
+                        <div class="relative w-full md:w-1/3 h-full">
+                            <img src="{{ asset('images/ministries.jpg') }}" alt="Ministries" class="w-full h-full object-cover grayscale">
+                            <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center">
+                                <h3 class="text-white text-5xl font-bold mb-4 font-['Rowdies']">MINISTRIES</h3>
+                                <a href="#" class="text-[#0d5c2f] font-bold bg-white px-6 py-1.5 text-sm rounded-xl">LEARN
+                                    MORE</a>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Simbahan Section (unchanged) -->
-                    <div class="bg-white py-24">
-                        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-16">
-                            <div class="md:w-1/2">
-                                <h2 class="text-[#0d5c2f] text-6xl font-bold mb-12 font-['Rowdies'] leading-tight">
-                                    ANG SIMBAHAN<br>NG PATEROS
-                                </h2>
-                                <div class="space-y-6">
-                                    <div class="group">
-                                        <a href="#"
-                                            class="bg-white shadow-lg hover:shadow-xl w-full py-4 px-8 text-2xl flex items-center justify-between rounded-lg border border-gray-100 hover:border-[#0d5c2f] transition-all duration-300">
-                                            <span class="font-['Rowdies'] text-gray-700">ANG PAROKYA</span>
-                                            <span
-                                                class="bg-[#0d5c2f] text-white w-8 h-8 flex items-center justify-center rounded-full group-hover:bg-[#b8860b] transition-colors text-lg leading-none">›</span>
-                                        </a>
-                                    </div>
-                                    <div class="group">
-                                        <a href="#"
-                                            class="bg-white shadow-lg hover:shadow-xl w-full py-4 px-8 text-2xl flex items-center justify-between rounded-lg border border-gray-100 hover:border-[#0d5c2f] transition-all duration-300">
-                                            <span class="font-['Rowdies'] text-gray-700">ANG DIYOSESIS</span>
-                                            <span
-                                                class="bg-[#0d5c2f] text-white w-8 h-8 flex items-center justify-center rounded-full group-hover:bg-[#b8860b] transition-colors text-lg leading-none">›</span>
-                                        </a>
-                                    </div>
-                                    <div class="group">
-                                        <a href="#"
-                                            class="bg-white shadow-lg hover:shadow-xl w-full py-4 px-8 text-2xl flex items-center justify-between rounded-lg border border-gray-100 hover:border-[#0d5c2f] transition-all duration-300">
-                                            <span class="font-['Rowdies'] text-gray-700">ANG KAPARIAN</span>
-                                            <span
-                                                class="bg-[#0d5c2f] text-white w-8 h-8 flex items-center justify-center rounded-full group-hover:bg-[#b8860b] transition-colors text-lg leading-none">›</span>
-                                        </a>
-                                    </div>
+                <!-- Simbahan Section (unchanged) -->
+                <div class="bg-white py-24">
+                    <div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-16">
+                        <div class="md:w-1/2">
+                            <h2 class="text-[#0d5c2f] text-6xl font-bold mb-12 font-['Rowdies'] leading-tight">
+                                ANG SIMBAHAN<br>NG PATEROS
+                            </h2>
+                            <div class="space-y-6">
+                                <div class="group">
+                                    <a href="#" class="bg-white shadow-lg hover:shadow-xl w-full py-4 px-8 text-2xl flex items-center justify-between rounded-lg border border-gray-100 hover:border-[#0d5c2f] transition-all duration-300">
+                                        <span class="font-['Rowdies'] text-gray-700">ANG PAROKYA</span>
+                                        <span class="bg-[#0d5c2f] text-white w-8 h-8 flex items-center justify-center rounded-full group-hover:bg-[#b8860b] transition-colors text-lg leading-none">›</span>
+                                    </a>
                                 </div>
-                            </div>
-                            <div class="md:w-1/2">
-                                <div class="relative">
-                                    <img src="{{ asset('images/altar.jpg') }}" alt="Church Altar"
-                                        class="w-full h-auto rounded-2xl shadow-2xl">
-                                    <div class="absolute inset-0 rounded-2xl shadow-inner"></div>
+                                <div class="group">
+                                    <a href="#" class="bg-white shadow-lg hover:shadow-xl w-full py-4 px-8 text-2xl flex items-center justify-between rounded-lg border border-gray-100 hover:border-[#0d5c2f] transition-all duration-300">
+                                        <span class="font-['Rowdies'] text-gray-700">ANG DIYOSESIS</span>
+                                        <span class="bg-[#0d5c2f] text-white w-8 h-8 flex items-center justify-center rounded-full group-hover:bg-[#b8860b] transition-colors text-lg leading-none">›</span>
+                                    </a>
+                                </div>
+                                <div class="group">
+                                    <a href="#" class="bg-white shadow-lg hover:shadow-xl w-full py-4 px-8 text-2xl flex items-center justify-between rounded-lg border border-gray-100 hover:border-[#0d5c2f] transition-all duration-300">
+                                        <span class="font-['Rowdies'] text-gray-700">ANG KAPARIAN</span>
+                                        <span class="bg-[#0d5c2f] text-white w-8 h-8 flex items-center justify-center rounded-full group-hover:bg-[#b8860b] transition-colors text-lg leading-none">›</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
+                        <div class="md:w-1/2">
+                            <div class="relative">
+                                <img src="{{ asset('images/altar.jpg') }}" alt="Church Altar" class="w-full h-auto rounded-2xl shadow-2xl">
+                                <div class="absolute inset-0 rounded-2xl shadow-inner"></div>
+                            </div>
+                        </div>
                     </div>
+                </div>
         </main>
 
         <!-- Footer -->
@@ -219,16 +223,13 @@
                             experience the grace of God in our historic church.
                         </p>
                         <div class="flex space-x-4">
-                            <a href="#"
-                                class="bg-white/10 hover:bg-[#b8860b] w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <a href="#" class="bg-white/10 hover:bg-[#b8860b] w-10 h-10 rounded-full flex items-center justify-center transition-colors">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="#"
-                                class="bg-white/10 hover:bg-[#b8860b] w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <a href="#" class="bg-white/10 hover:bg-[#b8860b] w-10 h-10 rounded-full flex items-center justify-center transition-colors">
                                 <i class="fab fa-twitter"></i>
                             </a>
-                            <a href="#"
-                                class="bg-white/10 hover:bg-[#b8860b] w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <a href="#" class="bg-white/10 hover:bg-[#b8860b] w-10 h-10 rounded-full flex items-center justify-center transition-colors">
                                 <i class="fab fa-instagram"></i>
                             </a>
                         </div>
@@ -242,12 +243,9 @@
                                     Us</a></li>
                             <li><a href="#" class="text-gray-300 hover:text-[#b8860b] transition-colors">Mass
                                     Schedule</a></li>
-                            <li><a href="#"
-                                    class="text-gray-300 hover:text-[#b8860b] transition-colors">Sacraments</a></li>
-                            <li><a href="#"
-                                    class="text-gray-300 hover:text-[#b8860b] transition-colors">Ministries</a></li>
-                            <li><a href="#"
-                                    class="text-gray-300 hover:text-[#b8860b] transition-colors">Contact</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-[#b8860b] transition-colors">Sacraments</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-[#b8860b] transition-colors">Ministries</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-[#b8860b] transition-colors">Contact</a></li>
                         </ul>
                     </div>
 
@@ -280,4 +278,24 @@
     </div>
 </body>
 
+</html>
+</footer>
+    </div>
+
+    <script>
+        document.querySelector('form[action="{{ route('logout') }}"]').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            fetch('{{ route('logout') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+            }).then(() => {
+                window.location.reload();
+            });
+        });
+    </script>
+</body>
 </html>

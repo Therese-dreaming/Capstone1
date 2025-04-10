@@ -22,7 +22,12 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('landing');
+            
+            // Check if user is admin and redirect accordingly
+            if (Auth::user()->is_admin) {
+                return redirect()->route('admin.services');
+            }
+            return redirect()->route('home');
         }
 
         return back()->with('error', 'The provided credentials do not match our records.');
@@ -33,6 +38,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect()->route('home');
     }
 }

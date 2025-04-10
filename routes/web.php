@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Admin\ServiceController;
 
-Route::get('/', function () {
+Route::get('/home', function () {
     return view('home');
 })->name('home');
 
@@ -22,14 +22,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/email/verify', function () {
         return view('auth.verify-code');
     })->name('verification.notice');
-
     Route::post('/email/verify', [RegisterController::class, 'verify'])->name('verification.verify');
     Route::post('/email/resend', [RegisterController::class, 'resend'])->name('verification.resend');
 });
 
-// Protected Routes
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/landing', function () {
-        return view('landing-page');
-    })->name('landing');
+// Admin Routes
+Route::prefix('admin')->group(function () {
+    Route::get('/services', [ServiceController::class, 'index'])->name('admin.services');
+    Route::get('/service/request/{type}', [ServiceController::class, 'showRequestForm'])->name('service.request.form');
+    Route::post('/service/request/store', [ServiceController::class, 'store'])->name('service.request.store');
+    Route::post('/service/approve/{schedule}', [ServiceController::class, 'approveService'])->name('service.approve');
 });
