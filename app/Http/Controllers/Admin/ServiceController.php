@@ -7,41 +7,37 @@ use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
 {
     public function index()
     {
-        // Add debug logging
         $today = Carbon::today();
         
-        \Log::info('Debug Today\'s Schedule Query:', [
-            'current_date' => $today->toDateString(),
-            'current_time' => $today->toTimeString()
-        ]);
-
         $todaySchedules = Schedule::with('priest')
             ->whereDate('service_date', $today)
             ->where('status', 'approved')
             ->orderBy('service_schedule', 'asc')
-            ->get();
-
-        // Log the query results
-        \Log::info('Today\'s Schedules Results:', [
-            'count' => $todaySchedules->count(),
-            'schedules' => $todaySchedules->toArray(),
-            'sql' => Schedule::whereDate('service_date', $today)
-                ->where('status', 'approved')
-                ->toSql()
-        ]);
+            ->get()
+            ->map(function ($schedule) {
+                $schedule->service_schedule = Carbon::parse($schedule->service_schedule)->format('H:i:s');
+                return $schedule;
+            });
 
         $pendingServices = Schedule::with('priest')
             ->where('status', 'pending')
             ->orderBy('service_date')
             ->orderBy('service_schedule')
-            ->get();
+            ->get()
+            ->map(function ($schedule) {
+                $schedule->service_schedule = Carbon::parse($schedule->service_schedule)->format('H:i:s');
+                return $schedule;
+            });
 
-        return view('admin.services', compact('todaySchedules', 'pendingServices'));
+        $priests = User::where('role', 'priest')->get();
+
+        return view('admin.services', compact('todaySchedules', 'pendingServices', 'priests'));
     }
 
     public function showRequestForm($type)
@@ -65,19 +61,25 @@ class ServiceController extends Controller
             'service_schedule' => 'required',
             'venue' => 'required|string',
             'priest_id' => 'nullable|exists:users,id',
-            'documents' => 'nullable|file|mimes:pdf,doc,docx|max:2048'
+            'documents.*' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
         try {
+            // Remove documents from validated data as we'll handle it separately
+            $serviceData = collect($validated)->except('documents')->toArray();
+            $serviceData['status'] = 'pending';
+
+            // Handle multiple file uploads
             if ($request->hasFile('documents')) {
-                $path = $request->file('documents')->store('service-documents', 'public');
-                $validated['document_path'] = $path;
+                $paths = [];
+                foreach ($request->file('documents') as $file) {
+                    $paths[] = $file->store('service-documents', 'public');
+                }
+                $serviceData['document_path'] = json_encode($paths);
             }
 
-            // Set initial status to pending
-            $validated['status'] = 'pending';
-
-            Schedule::create($validated);
+            // Create the service record with all data including document paths
+            $service = Schedule::create($serviceData);
 
             return redirect()->route('admin.services')
                 ->with('success', 'Service request submitted successfully');
@@ -98,5 +100,64 @@ class ServiceController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to approve service. Please try again.');
         }
+    }
+
+    public function cancelService($id)
+    {
+        try {
+            $service = Schedule::findOrFail($id);
+            $service->update([
+                'status' => 'cancelled'
+            ]);
+            return redirect()->back()->with('success', 'Service request cancelled successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to cancel service. Please try again.');
+        }
+    }
+
+    public function deleteService($id)
+    {
+        try {
+            \Log::info('Attempting to delete service with ID: ' . $id);
+            
+            $service = Schedule::findOrFail($id);
+            \Log::info('Service found:', ['service' => $service->toArray()]);
+            
+            if ($service->document_path) {
+                $documents = json_decode($service->document_path);
+                \Log::info('Documents to delete:', ['documents' => $documents]);
+                
+                // Check if $documents is an array or object before looping
+                if (!is_null($documents) && (is_array($documents) || is_object($documents))) {
+                    foreach ($documents as $document) {
+                        if (Storage::disk('public')->exists($document)) {
+                            Storage::disk('public')->delete($document);
+                            \Log::info('Deleted document: ' . $document);
+                        }
+                    }
+                }
+            }
+            
+            $service->delete();
+            \Log::info('Service deleted successfully');
+            
+            return redirect()->back()->with('success', 'Service request deleted successfully.');
+        } catch (\Exception $e) {
+            \Log::error('Service deletion error:', [
+                'id' => $id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back()->with('error', 'Failed to delete service. Please try again.');
+        }
+    }
+
+    public function history()
+    {
+        $completedServices = Schedule::whereIn('status', ['approved', 'cancelled'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        return view('admin.service-history', compact('completedServices'));
     }
 }

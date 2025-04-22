@@ -31,5 +31,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/services', [ServiceController::class, 'index'])->name('admin.services');
     Route::get('/service/request/{type}', [ServiceController::class, 'showRequestForm'])->name('service.request.form');
     Route::post('/service/request/store', [ServiceController::class, 'store'])->name('service.request.store');
-    Route::post('/service/approve/{schedule}', [ServiceController::class, 'approveService'])->name('service.approve');
+    Route::post('/services/{schedule}/approve', [ServiceController::class, 'approveService'])->name('admin.services.approve');
+    Route::post('/services/{schedule}/cancel', [ServiceController::class, 'cancelService'])->name('admin.services.cancel');
+    Route::delete('/services/{id}/delete', [ServiceController::class, 'deleteService'])->name('admin.services.delete');
+    Route::get('/services/history', [ServiceController::class, 'history'])->name('admin.services.history');
 });

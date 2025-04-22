@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Schedule extends Model
 {
@@ -28,5 +29,14 @@ class Schedule extends Model
     public function priest()
     {
         return $this->belongsTo(User::class, 'priest_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($schedule) {
+            $schedule->ticket_number = strtoupper(Str::random(2)) . '-' . rand(100000, 999999);
+        });
     }
 }
