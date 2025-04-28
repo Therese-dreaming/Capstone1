@@ -160,4 +160,41 @@ class ServiceController extends Controller
     
         return view('admin.service-history', compact('completedServices'));
     }
+
+    public function getEvents($type)
+    {
+        $events = Schedule::where('service_type', ucfirst($type))
+            ->where('status', 'approved')
+            ->get()
+            ->map(function ($schedule) {
+                return [
+                    'id' => $schedule->id,
+                    'title' => $schedule->service_type,
+                    'start' => $schedule->service_date . 'T' . $schedule->service_schedule,
+                    'end' => $schedule->service_date . 'T' . $schedule->service_schedule,
+                    'display' => 'block',
+                    'backgroundColor' => '#18421F',
+                    'borderColor' => '#18421F'
+                ];
+            });
+    
+        return response()->json($events);
+    }
+
+    public function getDateEvents($type, $date)
+    {
+        $events = Schedule::where('service_type', ucfirst($type))
+            ->whereDate('service_date', $date)
+            ->where('status', 'approved')
+            ->get()
+            ->map(function ($schedule) {
+                return [
+                    'service_type' => $schedule->service_type,
+                    'time' => Carbon::parse($schedule->service_schedule)->format('g:i A'),
+                    'requestor' => $schedule->first_name . ' ' . $schedule->last_name
+                ];
+            });
+
+        return response()->json($events);
+    }
 }

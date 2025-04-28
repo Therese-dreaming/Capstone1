@@ -35,4 +35,6 @@ Route::prefix('admin')->group(function () {
     Route::post('/services/{schedule}/cancel', [ServiceController::class, 'cancelService'])->name('admin.services.cancel');
     Route::delete('/services/{id}/delete', [ServiceController::class, 'deleteService'])->name('admin.services.delete');
     Route::get('/services/history', [ServiceController::class, 'history'])->name('admin.services.history');
+    Route::get('/services/{type}/events', [ServiceController::class, 'getEvents'])->name('admin.services.events');
+    Route::get('/services/{type}/events/{date}', [ServiceController::class, 'getDateEvents'])->name('admin.services.date.events');
 });
