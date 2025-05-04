@@ -23,11 +23,17 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             
-            // Check if user is admin and redirect accordingly
-            if (Auth::user()->is_admin) {
-                return redirect()->route('admin.services');
+            // Check user role and redirect accordingly
+            switch(Auth::user()->role) {
+                case 'admin':
+                    return redirect()->route('services');
+                case 'staff':
+                    return redirect()->route('staff.dashboard');
+                case 'priest':
+                    return redirect()->route('priest.dashboard');
+                default:
+                    return redirect()->route('home');
             }
-            return redirect()->route('home');
         }
 
         return back()->with('error', 'The provided credentials do not match our records.');

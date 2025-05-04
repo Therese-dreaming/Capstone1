@@ -16,14 +16,6 @@
                 <form method="POST" action="{{ route('register') }}" class="flex flex-col items-center">
                     @csrf
                     <div class="mb-4 w-[400px]">
-                        <input type="text" name="name" placeholder="Name" value="{{ old('name') }}" required 
-                            class="w-full p-3 border border-[#0d5c2f] rounded text-base @error('name') border-red-500 @enderror">
-                        @error('name')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4 w-[400px]">
                         <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required 
                             class="w-full p-3 border border-[#0d5c2f] rounded text-base @error('email') border-red-500 @enderror">
                         @error('email')
@@ -41,7 +33,7 @@
                     </div>
 
                     <button type="submit" 
-                        class="w-[200px] p-3 bg-[#0d5c2f] text-white rounded cursor-pointer text-base font-bold hover:bg-[#0d5c2f]/90">
+                        class="w-[200px] p-3 bg-[#0d5c2f] text-white rounded-lg cursor-pointer text-base font-bold hover:bg-[#0d5c2f]/90">
                         SIGNUP
                     </button>
                 </form>

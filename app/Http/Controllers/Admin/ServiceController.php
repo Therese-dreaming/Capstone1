@@ -115,40 +115,16 @@ class ServiceController extends Controller
         }
     }
 
-    public function deleteService($id)
+
+    public function destroy($id)
     {
         try {
-            \Log::info('Attempting to delete service with ID: ' . $id);
-            
             $service = Schedule::findOrFail($id);
-            \Log::info('Service found:', ['service' => $service->toArray()]);
-            
-            if ($service->document_path) {
-                $documents = json_decode($service->document_path);
-                \Log::info('Documents to delete:', ['documents' => $documents]);
-                
-                // Check if $documents is an array or object before looping
-                if (!is_null($documents) && (is_array($documents) || is_object($documents))) {
-                    foreach ($documents as $document) {
-                        if (Storage::disk('public')->exists($document)) {
-                            Storage::disk('public')->delete($document);
-                            \Log::info('Deleted document: ' . $document);
-                        }
-                    }
-                }
-            }
-            
             $service->delete();
-            \Log::info('Service deleted successfully');
             
-            return redirect()->back()->with('success', 'Service request deleted successfully.');
+            return redirect()->back()->with('success', 'Service deleted successfully');
         } catch (\Exception $e) {
-            \Log::error('Service deletion error:', [
-                'id' => $id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            return back()->with('error', 'Failed to delete service. Please try again.');
+            return redirect()->back()->with('error', 'Failed to delete service');
         }
     }
 
@@ -177,7 +153,7 @@ class ServiceController extends Controller
                     'borderColor' => '#18421F'
                 ];
             });
-    
+
         return response()->json($events);
     }
 

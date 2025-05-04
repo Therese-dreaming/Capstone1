@@ -24,18 +24,23 @@
 
             <!-- Admin Info -->
             <div class="flex items-center gap-3 mb-8 bg-white/10 p-3 rounded-lg hover:bg-white/20 transition-all cursor-pointer">
-                <img src="{{ asset('images/default-avatar.png') }}" alt="Admin" class="w-10 h-10 rounded-lg">
+                <img src="{{ asset('images/default-avatar.jpg') }}" alt="User Avatar" class="w-10 h-10 rounded-lg">
                 <div class="text-white">
-                    <p class="font-semibold">Alyanabai</p>
-                    <p class="text-sm opacity-80">Admin</p>
+                    <p class="font-semibold">{{ Auth::user()->name }}</p>
+                    <p class="text-sm opacity-80">{{ Auth::user()->is_admin ? 'Admin' : 'User' }}</p>
                 </div>
             </div>
 
             <!-- Navigation -->
             <nav class="space-y-2">
+
                 <a href="#" class="flex items-center gap-3 text-white/60 hover:text-white p-3 rounded-lg hover:bg-white/10 transition-colors group {{ request()->is('admin/dashboard*') ? 'bg-white/10 text-white' : '' }}">
                     <i class="fas fa-dashboard text-lg group-hover:scale-110 transition-transform"></i>
                     <span class="font-medium">Dashboard</span>
+                </a>
+                <a href="{{ route('admin.users') }}" class="flex items-center gap-3 text-white/60 hover:text-white p-3 rounded-lg hover:bg-white/10 transition-colors group {{ request()->is('admin/users*') ? 'bg-white/10 text-white' : '' }}">
+                    <i class="fas fa-users text-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="font-medium">Users</span>
                 </a>
                 <a href="{{ route('admin.services') }}" class="flex items-center gap-3 text-white/60 hover:text-white p-3 rounded-lg hover:bg-white/10 transition-colors group {{ request()->is('admin/services') ? 'bg-white/10 text-white' : '' }}">
                     <i class="fas fa-calendar text-lg group-hover:scale-110 transition-transform"></i>
@@ -44,10 +49,6 @@
                 <a href="{{ route('admin.services.history') }}" class="flex items-center gap-3 text-white/60 hover:text-white p-3 rounded-lg hover:bg-white/10 transition-colors group {{ request()->is('admin/services/history*') ? 'bg-white/10 text-white' : '' }}">
                     <i class="fas fa-history text-lg group-hover:scale-110 transition-transform"></i>
                     <span class="font-medium">Service History</span>
-                </a>
-                <a href="#" class="flex items-center gap-3 text-white/60 hover:text-white p-3 rounded-lg hover:bg-white/10 transition-colors group">
-                    <i class="fas fa-users text-lg group-hover:scale-110 transition-transform"></i>
-                    <span class="font-medium">Priests</span>
                 </a>
                 <a href="#" class="flex items-center gap-3 text-white/60 hover:text-white p-3 rounded-lg hover:bg-white/10 transition-colors group">
                     <i class="fas fa-chart-simple text-lg group-hover:scale-110 transition-transform"></i>
@@ -61,12 +62,6 @@
             <!-- Header -->
             <div class="flex items-center justify-between mb-8">
                 <div class="flex items-center gap-4">
-                    <div class="relative">
-                        <input type="text" id="searchInput" placeholder="Search by ticket number or name..." 
-                            class="bg-white/10 text-white pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/20" 
-                            onkeyup="searchServices()">
-                        <i class="fas fa-search text-white/60 absolute left-3 top-1/2 -translate-y-1/2"></i>
-                    </div>
                 </div>
                 <div class="flex items-center gap-4 text-white">
                     <button class="relative hover:text-white/80 transition-colors">

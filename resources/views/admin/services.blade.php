@@ -26,7 +26,6 @@
         <!-- Service Grid -->
         <div class="flex-1 grid grid-cols-3 gap-6">
             <!-- Mass -->
-            <!-- Mass card example -->
             <div onclick="showCalendar('mass')" class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
                 <div class="w-16 h-16 mb-4 flex items-center justify-center text-[#18421F] bg-[#18421F]/10 rounded-xl">
                     <i class="fas fa-church text-4xl"></i>
@@ -36,49 +35,49 @@
             </div>
 
             <!-- Baptism -->
-            <a href="{{ route('service.request.form', ['type' => 'baptism']) }}" class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
+            <div onclick="showCalendar('baptism')" class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
                 <div class="w-16 h-16 mb-4 flex items-center justify-center text-[#18421F] bg-[#18421F]/10 rounded-xl">
                     <i class="fas fa-water text-4xl"></i>
                 </div>
                 <h3 class="text-xl font-bold">BAPTISM</h3>
                 <p class="text-gray-500 text-sm mt-2">Sacrament</p>
-            </a>
+            </div>
 
             <!-- Matrimony -->
-            <a href="{{ route('service.request.form', ['type' => 'matrimony']) }}" class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
+            <div onclick="showCalendar('matrimony')" class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
                 <div class="w-16 h-16 mb-4 flex items-center justify-center text-[#18421F] bg-[#18421F]/10 rounded-xl">
                     <i class="fas fa-rings-wedding text-4xl"></i>
                 </div>
                 <h3 class="text-xl font-bold">MATRIMONY</h3>
                 <p class="text-gray-500 text-sm mt-2">Sacrament</p>
-            </a>
+            </div>
 
             <!-- Sick Call -->
-            <a href="{{ route('service.request.form', ['type' => 'sickcall']) }}" class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
+            <div onclick="showCalendar('sickcall')" class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
                 <div class="w-16 h-16 mb-4 flex items-center justify-center text-[#18421F] bg-[#18421F]/10 rounded-xl">
                     <i class="fas fa-hospital-user text-4xl"></i>
                 </div>
                 <h3 class="text-xl font-bold">SICK CALL</h3>
                 <p class="text-gray-500 text-sm mt-2">Emergency Service</p>
-            </a>
+            </div>
 
             <!-- Blessing -->
-            <a href="{{ route('service.request.form', ['type' => 'blessing']) }}" class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
+            <div onclick="showCalendar('blessing')" class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
                 <div class="w-16 h-16 mb-4 flex items-center justify-center text-[#18421F] bg-[#18421F]/10 rounded-xl">
                     <i class="fas fa-pray text-4xl"></i>
                 </div>
                 <h3 class="text-xl font-bold">BLESSING</h3>
                 <p class="text-gray-500 text-sm mt-2">House/Car Blessing</p>
-            </a>
+            </div>
 
             <!-- Venue Reservation -->
-            <a href="{{ route('service.request.form', ['type' => 'venue']) }}" class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
+            <div onclick="showCalendar('venue')" class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
                 <div class="w-16 h-16 mb-4 flex items-center justify-center text-[#18421F] bg-[#18421F]/10 rounded-xl">
                     <i class="fas fa-building-columns text-4xl"></i>
                 </div>
                 <h3 class="text-xl font-bold">VENUE RESERVATION</h3>
                 <p class="text-gray-500 text-sm mt-2">Church Facilities</p>
-            </a>
+            </div>
         </div>
 
         <!-- Today's Schedule -->
@@ -274,7 +273,7 @@
         modal.style.display = 'none';
     }
 
-    // Close modals when clicking outside
+    // Remove this duplicate window.onclick handler
     window.onclick = function(event) {
         const approveModal = document.getElementById('approveModal');
         const cancelModal = document.getElementById('cancelModal');
@@ -289,11 +288,11 @@
 
     function searchServices() {
         const input = document.getElementById('searchInput').value.toLowerCase();
-        const services = document.querySelectorAll('.pending-service');
+        const services = document.querySelectorAll('.bg-white.p-4.rounded-lg.shadow');
 
         services.forEach(service => {
-            const ticketNumber = service.querySelector('.ticket-number').textContent.toLowerCase();
-            const name = service.querySelector('.requestor-name').textContent.toLowerCase();
+            const ticketNumber = service.querySelector('p.text-sm.text-gray-500').textContent.toLowerCase();
+            const name = service.querySelector('p.text-sm.text-gray-500:nth-child(3)').textContent.toLowerCase();
 
             if (ticketNumber.includes(input) || name.includes(input)) {
                 service.style.display = '';

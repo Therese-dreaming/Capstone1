@@ -3,7 +3,7 @@
         <h3 class="text-xl font-bold mb-4">Confirm Deletion</h3>
         <p class="text-gray-600 mb-6">Are you sure you want to permanently delete this {{ $type ?? 'item' }}? This action cannot be undone.</p>
         <div class="flex justify-end gap-4">
-            <button type="button" onclick="closeDeleteModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+            <button onclick="closeDeleteModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">
                 Cancel
             </button>
             <form id="deleteForm" method="POST" class="inline">
