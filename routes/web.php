@@ -62,7 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/services/book', [userServiceController::class, 'bookingForm'])->name('services.book');
-    Route::post('/services', [userServiceController::class, 'store'])->name('services.store');
+    Route::post('/services', [BookingController::class, 'store'])->name('services.store');
     Route::get('/services/my-bookings', [userServiceController::class, 'myBookings'])->name('services.my-bookings');
 });
 

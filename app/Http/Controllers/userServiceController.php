@@ -24,16 +24,15 @@ class userServiceController extends Controller
 
         $schedule = Schedule::create([
             'service_type' => $request->service_type,
-            'first_name' => Auth::user()->first_name, // You might want to split this into first/last name
-            'last_name' => Auth::user()->last_name, // You'll need to add this field to your registration
+            'first_name' => Auth::user()->first_name,
+            'last_name' => Auth::user()->last_name,
             'service_date' => $request->preferred_date,
             'service_schedule' => $request->preferred_time,
             'status' => 'pending',
             'notes' => $request->notes,
-            // Add other required fields from your schedules table
-            'address' => Auth::user()->address, // You'll need to collect this in your form
-            'contact_number' => Auth::user()->contact_number, // You'll need to collect this in your form
-            'venue' => 'Church' // Default venue, you might want to make this configurable
+            'address' => Auth::user()->address,
+            'contact_number' => Auth::user()->contact_number,
+            'venue' => 'Church'
         ]);
 
         return redirect()->back()->with('success', 'Service booking submitted successfully! Your ticket number is: ' . $schedule->ticket_number);

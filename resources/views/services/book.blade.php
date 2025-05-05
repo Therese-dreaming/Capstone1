@@ -20,7 +20,7 @@
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
                 <ul>
                     @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                    <li>{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
@@ -32,27 +32,184 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Service Type</label>
-                        <select name="service_type" required class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                        <select name="service_type" required class="w-full px-4 py-2 rounded-lg border border-gray-300" onchange="handleServiceTypeChange(this.value)">
                             <option value="">Select a service</option>
                             <option value="baptism">Baptism</option>
                             <option value="wedding">Wedding</option>
                             <option value="mass_intention">Mass Intention</option>
                             <option value="blessing">House/Car Blessing</option>
                             <option value="confirmation">Confirmation</option>
+                            <option value="sick_call">Sick Call</option>
                         </select>
                     </div>
 
-                    <div>
+                    <!-- Dynamic Service Forms -->
+                    <div id="baptismForm" class="service-form hidden">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
+                                <input type="text" name="child_name" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                                <input type="date" name="date_of_birth" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Place of Birth</label>
+                                <input type="text" name="place_of_birth" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Father's Name</label>
+                                <input type="text" name="father_name" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Mother's Name</label>
+                                <input type="text" name="mother_name" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Parents' Nationality</label>
+                                <input type="text" name="nationality" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="weddingForm" class="service-form hidden">
+                        <div class="space-y-4">
+                            <h3 class="font-medium text-gray-900">Groom Information</h3>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Groom's Full Name</label>
+                                <input type="text" name="groom_name" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Groom's Age</label>
+                                <input type="number" name="groom_age" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Groom's Religion</label>
+                                <input type="text" name="groom_religion" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+
+                            <h3 class="font-medium text-gray-900 mt-6">Bride Information</h3>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Bride's Full Name</label>
+                                <input type="text" name="bride_name" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Bride's Age</label>
+                                <input type="number" name="bride_age" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Bride's Religion</label>
+                                <input type="text" name="bride_religion" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="massIntentionForm" class="service-form hidden">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Type of Mass</label>
+                                <select name="mass_type" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                                    <option value="">Select Mass Type</option>
+                                    <option value="thanksgiving">Thanksgiving</option>
+                                    <option value="special_intention">Special Intention</option>
+                                    <option value="healing">Healing</option>
+                                    <option value="repose_soul">Repose of the Soul</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Name(s) to be Included in Mass</label>
+                                <textarea name="mass_names" rows="3" class="w-full px-4 py-2 rounded-lg border border-gray-300"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="blessingForm" class="service-form hidden">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Type of Blessing</label>
+                                <select name="blessing_type" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                                    <option value="">Select Blessing Type</option>
+                                    <option value="house">House Blessing</option>
+                                    <option value="car">Car Blessing</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address/Location</label>
+                                <textarea name="blessing_location" rows="3" class="w-full px-4 py-2 rounded-lg border border-gray-300"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="confirmationForm" class="service-form hidden">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Confirmand's Name</label>
+                                <input type="text" name="confirmand_name" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                                <input type="date" name="confirmand_dob" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Place of Baptism</label>
+                                <input type="text" name="baptism_place" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Date of Baptism</label>
+                                <input type="date" name="baptism_date" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Sponsor's Name</label>
+                                <input type="text" name="sponsor_name" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="sick_callForm" class="service-form hidden">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Patient's Name</label>
+                                <input type="text" name="patient_name" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Patient's Age</label>
+                                <input type="number" name="patient_age" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Patient's Condition</label>
+                                <textarea name="patient_condition" rows="3" class="w-full px-4 py-2 rounded-lg border border-gray-300"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Hospital/Location</label>
+                                <input type="text" name="location" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Room/Ward Number</label>
+                                <input type="text" name="room_number" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Contact Person</label>
+                                <input type="text" name="contact_person" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Emergency Contact Number</label>
+                                <input type="text" name="emergency_contact" class="w-full px-4 py-2 rounded-lg border border-gray-300">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="common-fields hidden">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Date</label>
                         <input type="date" name="preferred_date" required class="w-full px-4 py-2 rounded-lg border border-gray-300">
                     </div>
 
-                    <div>
+                    <div class="common-fields hidden">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Time</label>
                         <input type="time" name="preferred_time" required class="w-full px-4 py-2 rounded-lg border border-gray-300">
                     </div>
 
-                    <div>
+                    <div class="common-fields hidden">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Additional Notes</label>
                         <textarea name="notes" rows="4" class="w-full px-4 py-2 rounded-lg border border-gray-300"></textarea>
                     </div>
@@ -66,6 +223,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 @else
 <div class="bg-white min-h-screen py-20">
@@ -100,4 +258,31 @@
     </div>
 </div>
 @endauth
+<script>
+    function handleServiceTypeChange(value) {
+        // Hide all service forms first
+        document.querySelectorAll('.service-form').forEach(form => {
+            form.classList.add('hidden');
+        });
+
+        // Hide common fields initially
+        document.querySelectorAll('.common-fields').forEach(field => {
+            field.classList.add('hidden');
+        });
+
+        // Show the selected form if a service is selected
+        if (value && value !== '') {
+            const formId = value.includes('mass') ? 'massIntentionForm' : value + 'Form';
+            const selectedForm = document.getElementById(formId);
+            if (selectedForm) {
+                selectedForm.classList.remove('hidden');
+                // Show common fields when a service is selected
+                document.querySelectorAll('.common-fields').forEach(field => {
+                    field.classList.remove('hidden');
+                });
+            }
+        }
+    }
+
+</script>
 @endsection
