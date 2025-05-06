@@ -57,18 +57,20 @@ Route::prefix('priest')->middleware(['auth', 'role:priest'])->group(function () 
     Route::get('/dashboard', [ServiceController::class, 'priestDashboard'])->name('priest.dashboard');
 });
 
+// Move this route up, before the authenticated routes
+Route::get('/services', function () {
+    return view('userServices');
+})->name('services');
+
 // User Routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/services/book', [userServiceController::class, 'bookingForm'])->name('services.book');
-    Route::post('/services', [BookingController::class, 'store'])->name('services.store');
+    Route::post('/services/store', [userServiceController::class, 'store'])->name('services.store');
     Route::get('/services/my-bookings', [userServiceController::class, 'myBookings'])->name('services.my-bookings');
 });
 
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
-Route::get('/services', function () {
-    return view('userServices');
-})->name('services');

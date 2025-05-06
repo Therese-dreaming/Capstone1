@@ -18,7 +18,9 @@ CREATE TABLE baptism_details (
     place_of_birth varchar(255),
     father_name varchar(255),
     mother_name varchar(255),
-    nationality varchar(100)
+    nationality varchar(100),
+    created_at timestamp,
+    updated_at timestamp
 );
 
 CREATE TABLE wedding_details (
@@ -29,21 +31,27 @@ CREATE TABLE wedding_details (
     groom_religion varchar(100),
     bride_name varchar(255),
     bride_age int,
-    bride_religion varchar(100)
+    bride_religion varchar(100),
+    created_at timestamp,
+    updated_at timestamp
 );
 
 CREATE TABLE mass_intention_details (
     id bigint PRIMARY KEY AUTO_INCREMENT,
     booking_id bigint,
     mass_type varchar(50),
-    mass_names text
+    mass_names text,
+    created_at timestamp,
+    updated_at timestamp
 );
 
 CREATE TABLE blessing_details (
     id bigint PRIMARY KEY AUTO_INCREMENT,
     booking_id bigint,
     blessing_type varchar(50),
-    blessing_location text
+    blessing_location text,
+    created_at timestamp,
+    updated_at timestamp
 );
 
 CREATE TABLE confirmation_details (
@@ -53,7 +61,9 @@ CREATE TABLE confirmation_details (
     confirmand_dob date,
     baptism_place varchar(255),
     baptism_date date,
-    sponsor_name varchar(255)
+    sponsor_name varchar(255),
+    created_at timestamp,
+    updated_at timestamp
 );
 
 CREATE TABLE sick_call_details (

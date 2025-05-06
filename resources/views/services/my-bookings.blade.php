@@ -49,6 +49,52 @@
                                 <p class="text-sm"><span class="font-medium">Additional Notes:</span> {{ $booking->notes }}</p>
                             </div>
                         @endif
+
+                        <div class="mt-4">
+                            <button onclick="openModal('modal-{{ $booking->id }}')" class="inline-flex items-center px-4 py-2 bg-[#0d5c2f] text-white rounded-lg hover:bg-[#0d5c2f]/90 transition-colors">
+                                <i class="fas fa-eye mr-2"></i> View Details
+                            </button>
+                        </div>
+
+                        <!-- Modal -->
+                        <div id="modal-{{ $booking->id }}" class="fixed inset-0 z-50 hidden overflow-y-auto">
+                            <div class="flex items-center justify-center min-h-screen px-4">
+                                <div class="fixed inset-0 bg-black opacity-50"></div>
+                                <div class="relative bg-white rounded-lg max-w-2xl w-full">
+                                    <div class="p-6">
+                                        <div class="flex justify-between items-center mb-4">
+                                            <h3 class="text-2xl font-bold text-[#0d5c2f] capitalize">
+                                                {{ str_replace('_', ' ', $booking->service_type) }} Details
+                                            </h3>
+                                            <button onclick="closeModal('modal-{{ $booking->id }}')" class="text-gray-400 hover:text-gray-500">
+                                                <i class="fas fa-times text-xl"></i>
+                                            </button>
+                                        </div>
+                                        
+                                        @switch($booking->service_type)
+                                            @case('baptism')
+                                                @include('services.partials._baptism_details', ['booking' => $booking])
+                                                @break
+                                            @case('wedding')
+                                                @include('services.partials._wedding_details', ['booking' => $booking])
+                                                @break
+                                            @case('mass_intention')
+                                                @include('services.partials._mass_intention_details', ['booking' => $booking])
+                                                @break
+                                            @case('blessing')
+                                                @include('services.partials._blessing_details', ['booking' => $booking])
+                                                @break
+                                            @case('confirmation')
+                                                @include('services.partials._confirmation_details', ['booking' => $booking])
+                                                @break
+                                            @case('sick_call')
+                                                @include('services.partials._sick_call_details', ['booking' => $booking])
+                                                @break
+                                        @endswitch
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 @empty
                     <div class="text-center py-12">
@@ -66,4 +112,30 @@
         </div>
     </div>
 </div>
+
+<!-- Add this script at the end of your file -->
+<script>
+function openModal(modalId) {
+    document.getElementById(modalId).classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    if (event.target.classList.contains('fixed')) {
+        const modals = document.querySelectorAll('.fixed.inset-0');
+        modals.forEach(modal => {
+            if (!modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    }
+}
+</script>
 @endsection
